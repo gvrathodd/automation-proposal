@@ -1,0 +1,5 @@
+﻿family,title,segments,segment_share_pct,time_share_pct,decision,reason
+ob,Deferred — onboarding,77,14.26,16.8,DEFER,"Substantial workload (14.3% of segments / 16.8% of time) and strong mechanical activity, but higher governance sensitivity makes it better as a later controlled pilot after the primary pattern is validated."
+si,Deferred — social insurance,68,12.59,11.68,DEFER,"Meaningful repetitive workload (12.6% of segments / 11.7% of time), but higher governance sensitivity and decision involvement favor a controlled pilot after the first two opportunities."
+rt,Deferred — resident tax,55,10.19,8.61,DEFER,Lower workload (10.2% of segments / 8.6% of time) and high governance sensitivity; defer until higher-value families are validated.
+other,Deferred — supporting/non-family activity,32,5.93,2.95,DEFER,Only 5.9% of segments and 3.0% of time with no stable business-family meaning; not a sensible first automation target.

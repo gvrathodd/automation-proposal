@@ -1,0 +1,6 @@
+﻿family,all_540_segments,direct_ocr_segments,direct_ocr_coverage_pct,observed_case_types,confirmed_subprocesses,family_level_fallback,interpretation
+pi,209,100,47.84688995215311,expense_reimbursement | payroll_change | dependent_deduction | transportation_expense,0,retain family-level plus observed case types,Observed business case types exist; workflow-level split requires manual screenshot confirmation.
+la,99,21,21.21212121212121,attendance_leave | paid_leave,0,retain family-level plus observed case types,Observed business case types exist; workflow-level split requires manual screenshot confirmation.
+ob,77,12,15.584415584415584,onboarding | onboarding_insurance | onboarding_allowances | my_number,0,retain family-level plus observed case types,Observed business case types exist; workflow-level split requires manual screenshot confirmation.
+si,68,14,20.588235294117645,social_insurance | maternity_leave | childcare_leave | insurance_exemption,0,retain family-level plus observed case types,Observed business case types exist; workflow-level split requires manual screenshot confirmation.
+rt,55,13,23.636363636363637,,0,family-level,No confirmed workflow split from current evidence.

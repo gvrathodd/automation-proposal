@@ -1,0 +1,7 @@
+﻿scope_area,value,decision,evidence
+Target,pi family-level workflow,BUILD FIRST,"Largest family: 38.7% of segments and 35.8% of total time, with pervasive mechanical activity."
+Automate,Read/retrieve visible case data; copy/transfer data; transform/format data; populate structured browser fields; prepare repetitive documents; predictable navigation; repetitive submission preparation.,IN SCOPE,"Layer 7/8 show pervasive browser, clipboard, typing, form-entry, navigation, and document activity."
+Human gate,"Approval, hold/rejection, policy interpretation, ambiguous cases, exception handling, and final business release.",OUT OF SCOPE,Layer 8 found contextual decision-point evidence; a button label alone is not treated as proof that preceding work is automatable.
+Automation form,Human-in-the-loop desktop/browser workflow assistant with an explicit review gate.,RECOMMENDED,Browser/data-transfer work is directly evidenced; API/authentication/business-rule availability remains unknown.
+Pre-production gate,"Validate authentication, permissions, selector stability, business rules, exceptions, auditability, and data-handling controls in a sandbox.",REQUIRED,These production facts are not established by Dataset B and remain Layer-9 unknowns.
+Case-type branching,Do not create separate autonomous branches from OCR-observed case types yet; treat them as branch evidence within pi.,DEFER,Layer 5 established observed business case types but no confirmed workflow-level subprocess split.
