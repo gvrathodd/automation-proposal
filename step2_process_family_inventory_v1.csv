@@ -1,7 +1,0 @@
-﻿code,business_process_japanese,business_process_english,segments,segment_share_pct,relative_time_rank,operators,variants,evidence
-pi,経費精算・給与変更,Expense reimbursement & payroll changes,209,38.7,1,4,browser-only; Word-assisted; Notepad-assisted; Excel-assisted,Repeated /payroll-items screens; OCR repeatedly shows 経費精算・給与変更 and payroll/expense fields.
-la,勤怠・休暇申請,Attendance & leave applications,99,18.3,2,4,browser-only; Word-assisted; Notepad-assisted,Dominant /leave-applications screens; OCR shows leave/attendance application types such as フレックス変更申請 and 年次有給休暇.
-ob,入社手続き,Employee onboarding / joining procedures,77,14.3,3,4,browser-only; Word-assisted; Notepad-assisted,"Dominant /onboarding screens; OCR shows 入社照合一覧, 入社日, 部署 and completion/reconciliation status."
-si,社会保険関連申請,Social-insurance-related applications,68,12.6,4,4,browser-only; Word-assisted; Notepad-assisted; Excel-assisted,"Dominant /social-insurance screens; OCR shows 産前産後休暇申請, 育児休業申請, 介護休業申請 and social-insurance exemption procedures."
-rt,住民税・その他,Resident tax & other administrative processing,55,10.2,5,4,browser-only; Word-assisted; Notepad-assisted,Dominant /resident-tax screens; OCR consistently identifies the 財務会計システム resident-tax route.
-other,その他 / 未分類,Other / unclassified,32,5.9,,,,No recognized process-family prefix in the final raw-event evidence.
