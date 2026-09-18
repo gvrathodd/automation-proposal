@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PI Automation Sandbox</title>
+<style>
+:root{--bg:#f5f7fb;--panel:#fff;--ink:#182230;--muted:#667085;--line:#dfe4ec;--accent:#2957d9;--good:#15803d;--warn:#a16207;--shadow:0 10px 35px rgba(16,24,40,.08)}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:Segoe UI,Arial,sans-serif}
+header{background:#101828;color:#fff;padding:18px 28px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-size:20px;font-weight:700}.sub{font-size:12px;opacity:.72;margin-top:3px}.badge{padding:7px 11px;border:1px solid #475467;border-radius:999px;font-size:12px}
+main{max-width:1400px;margin:24px auto;padding:0 20px}.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+select,button{height:38px;border:1px solid var(--line);border-radius:8px;background:#fff;padding:0 12px;font-size:14px}
+.toolbar button{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600;cursor:pointer}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:18px}
+.panel h2{margin:0 0 4px;font-size:17px}.hint{color:var(--muted);font-size:12px;margin-bottom:14px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:11px}.field{border:1px solid var(--line);border-radius:10px;padding:10px;background:#fbfcfe}
+.field label,.target label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}.value{font-size:14px;font-weight:600;min-height:20px}
+.state{margin-top:14px;border-radius:10px;padding:12px;font-size:13px}.good{background:#edf9f0;color:var(--good)}.warn{background:#fff8e6;color:var(--warn)}
+.evidence{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}.evidence-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.evidence-item{padding:8px;border-radius:8px;background:#f8fafc;font-size:12px}.evidence-item b{display:block;color:var(--muted);margin-bottom:3px}
+.target{margin-top:18px}.target form{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.target .full{grid-column:1/-1}.target input,.target select,.target textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px;font-size:13px;background:#fff}
+.target textarea{min-height:74px}.verify{margin-top:14px;padding:10px;border-radius:10px;background:#f8fafc;border:1px dashed #cbd5e1;font-size:12px}
+.actions{margin-top:16px;display:flex;gap:10px}.actions button{font-weight:700;cursor:pointer}
+.register{background:#0f766e!important;color:#fff}.hold{color:#7c3aed}.gate{margin-top:12px}
+.log{margin-top:18px}.log pre{background:#0b1220;color:#d1e5ff;border-radius:10px;padding:13px;min-height:130px;overflow:auto;font-size:11px}
+footer{color:var(--muted);font-size:11px;margin:18px 2px 30px}
+@media(max-width:950px){.layout{grid-template-columns:1fr}.fields,.target form{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="brand">PI Automation Sandbox</div><div class="sub">Read → validate → transfer → populate → verify → human review</div></div>
+  <div class="badge" id="automationBadge">AUTOMATION IDLE</div>
+</header>
+<main>
+  <div class="toolbar">
+    <select id="caseSelector"></select>
+    <button id="loadCase">Load case</button>
+    <span id="caseDescription" style="color:#667085;font-size:13px"></span>
+  </div>
+
+  <div class="layout">
+    <section class="panel">
+      <h2>1. Source Case</h2>
+      <div class="hint">A reconstructed source record. Playwright reads these values from the live DOM.</div>
+      <div class="fields" id="sourceFields"></div>
+      <div id="sourceState" class="state"></div>
+      <div class="evidence">
+        <h2 style="font-size:14px">Evidence Context</h2>
+        <div class="evidence-grid" id="evidenceGrid"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>2. Target /payroll-items</h2>
+      <div class="hint">Automation populates and verifies the mechanical portion, then stops.</div>
+      <div class="target">
+        <form id="payrollForm">
+          <div><label for="employee_id">Employee ID</label><input id="employee_id"></div>
+          <div><label for="employee_name">Employee Name</label><input id="employee_name"></div>
+          <div><label for="request_type">Request Type</label>
+            <select id="request_type"><option value="">Select…</option><option value="expense_reimbursement">Expense reimbursement</option><option value="payroll_change">Payroll change</option></select>
+          </div>
+          <div><label for="category">Category</label><input id="category"></div>
+          <div><label for="amount">Amount</label><input id="amount"></div>
+          <div><label for="effective_date">Effective Date</label><input id="effective_date" type="date"></div>
+          <div><label for="status">Status</label><input id="status"></div>
+          <div><label for="document">Supporting Document</label><input id="document"></div>
+          <div class="full"><label for="processing_comment">Processing Comment</label><textarea id="processing_comment"></textarea></div>
+        </form>
+        <div class="verify" id="verification">Waiting for automation.</div>
+        <div class="actions"><button class="register" id="register">Register</button><button class="hold" id="hold">Hold</button></div>
+        <div class="state warn gate" id="humanGate">HUMAN GATE: automation stops before Register / Hold.</div>
+      </div>
+    </section>
+  </div>
+
+  <section class="panel log">
+    <h2>3. Automation Trace</h2>
+    <div class="hint">Auditable browser-side trace.</div>
+    <pre id="trace"></pre>
+  </section>
+
+  <footer>
+    Local reconstruction for demonstration. Field concepts, route and decision boundary are evidence-grounded; fixture values are demo values, not production records.
+  </footer>
+</main>
+
+<script>
+const CASES={
+"PI-REAL-001":{kind:"NORMAL",description:"Expense reimbursement — normal preparation path",employee_id:"EMP-DEMO-1042",employee_name:"Demo Employee A",request_type:"expense_reimbursement",category:"Transportation",amount:"45128",effective_date:"2026-08-31",status:"Pending",document:"transportation_receipt.pdf",processing_comment:"Prepared for human review.",evidence:{workflow:"Read → transfer → enter → review",target_route:"/payroll-items",raw_signals:"clipboard_change + browser_form_input + app_switch",ocr_semantics:"expense reimbursement",decision:"human review before Register/Hold"}},
+"PI-REAL-002":{kind:"BUSINESS_SUBTYPE",description:"Payroll change — parameterized case type",employee_id:"EMP-DEMO-2077",employee_name:"Demo Employee B",request_type:"payroll_change",category:"Salary",amount:"72000",effective_date:"2026-09-01",status:"Pending",document:"salary_change_notice.docx",processing_comment:"Prepared using the payroll-change parameter.",evidence:{workflow:"Read → transform → enter → review",target_route:"/payroll-items",raw_signals:"browser_form_input + clipboard_change + app_switch",ocr_semantics:"payroll change",decision:"human review before Register/Hold"}},
+"PI-REAL-003":{kind:"DOCUMENT_VARIANT",description:"Expense reimbursement — document/application variant",employee_id:"EMP-DEMO-3118",employee_name:"Demo Employee C",request_type:"expense_reimbursement",category:"Other",amount:"12800",effective_date:"2026-09-05",status:"Pending",document:"expense_supporting_document.docx",processing_comment:"Supporting artifact requires review.",evidence:{workflow:"Read → transfer → document preparation → enter → review",target_route:"/payroll-items",raw_signals:"clipboard_change + app_switch + document work",ocr_semantics:"expense reimbursement",decision:"human review before Register/Hold"}},
+"PI-REAL-004":{kind:"MISSING_FIELD",description:"Missing employee ID — safe stop",employee_id:"",employee_name:"Demo Employee D",request_type:"expense_reimbursement",category:"Transportation",amount:"9800",effective_date:"2026-09-07",status:"Pending",document:"receipt.pdf",processing_comment:"Cannot prepare without employee ID.",evidence:{workflow:"Read → validate → stop",target_route:"/payroll-items",raw_signals:"browser_form_input",ocr_semantics:"expense reimbursement",decision:"human correction required"}},
+"PI-REAL-005":{kind:"INVALID_VALUE",description:"Non-numeric amount — safe stop",employee_id:"EMP-DEMO-4519",employee_name:"Demo Employee E",request_type:"payroll_change",category:"Salary",amount:"not-a-number",effective_date:"2026-09-10",status:"Pending",document:"change_notice.docx",processing_comment:"Cannot prepare with an invalid amount.",evidence:{workflow:"Read → validate → stop",target_route:"/payroll-items",raw_signals:"browser_form_input",ocr_semantics:"payroll change",decision:"human correction required"}},
+"PI-REAL-006":{kind:"DECISION_EXCEPTION",description:"Prepared case with exception flag — human decision required",employee_id:"EMP-DEMO-5920",employee_name:"Demo Employee F",request_type:"expense_reimbursement",category:"Transportation",amount:"61500",effective_date:"2026-09-12",status:"Needs review",document:"exception_receipt.pdf",processing_comment:"Exception detected; human review required before release.",evidence:{workflow:"Read → transfer → enter → review → exception",target_route:"/payroll-items",raw_signals:"clipboard_change + browser_form_input + decision evidence",ocr_semantics:"expense reimbursement",decision:"HUMAN DECISION: resolve exception / Register / Hold"}}
+};
+
+function log(msg){document.getElementById("trace").textContent+=`[${new Date().toLocaleTimeString()}] ${msg}\n`}
+function clearTarget(){["employee_id","employee_name","category","amount","effective_date","status","document","processing_comment"].forEach(id=>document.getElementById(id).value="");document.getElementById("request_type").value=""}
+function loadCase(id){
+ const c=CASES[id]; document.getElementById("caseDescription").textContent=c.description;
+ const fields=[["employee_id","Employee ID"],["employee_name","Employee Name"],["request_type","Request Type"],["category","Category"],["amount","Amount"],["effective_date","Effective Date"],["status","Status"],["document","Supporting Document"],["processing_comment","Processing Comment"]];
+ document.getElementById("sourceFields").innerHTML=fields.map(([k,l])=>`<div class="field"><label>${l}</label><div class="value" id="source-${k}" data-source-field="${k}">${c[k]||"MISSING"}</div></div>`).join("");
+ const st=document.getElementById("sourceState");st.className="state "+((c.kind==="MISSING_FIELD"||c.kind==="INVALID_VALUE"||c.kind==="DECISION_EXCEPTION")?"warn":"good");
+ st.textContent=c.kind==="MISSING_FIELD"?"Source validation issue: employee ID is missing.":c.kind==="INVALID_VALUE"?"Source validation issue: amount is invalid.":c.kind==="DECISION_EXCEPTION"?"Source contains an exception requiring human review.":"Source case ready for mechanical preparation.";
+ document.getElementById("evidenceGrid").innerHTML=Object.entries(c.evidence).map(([k,v])=>`<div class="evidence-item"><b>${k.replaceAll("_"," ")}</b>${v}</div>`).join("");
+ document.getElementById("automationBadge").textContent="AUTOMATION IDLE";document.getElementById("verification").textContent="Waiting for automation.";document.getElementById("trace").textContent="";clearTarget();
+}
+const selector=document.getElementById("caseSelector");
+Object.entries(CASES).forEach(([id,c])=>{const o=document.createElement("option");o.value=id;o.textContent=`${id} — ${c.kind}`;selector.appendChild(o)});
+document.getElementById("loadCase").onclick=()=>loadCase(selector.value);
+loadCase("PI-REAL-001");
+
+window.PI_CASES=CASES;
+window.getCase=()=>CASES[selector.value];
+window.getPreparedRecord=()=>({employee_id:document.getElementById("employee_id").value,employee_name:document.getElementById("employee_name").value,request_type:document.getElementById("request_type").value,category:document.getElementById("category").value,amount:document.getElementById("amount").value,effective_date:document.getElementById("effective_date").value,status:document.getElementById("status").value,document:document.getElementById("document").value,processing_comment:document.getElementById("processing_comment").value});
+document.getElementById("register").onclick=e=>{e.preventDefault();log("MANUAL Register clicked.");};
+document.getElementById("hold").onclick=e=>{e.preventDefault();log("MANUAL Hold clicked.");};
+</script>
+</body>
+</html>
