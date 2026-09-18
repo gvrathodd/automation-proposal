@@ -18,10 +18,8 @@ The project uses **Dataset A** as the labelled development/evaluation dataset an
 
 ## Automation Demo
 
-**Latest PI/LA visible automation demo:**  
+**Latest LA visible automation demo:**  
 https://youtu.be/82_9SsIhONg
-
-The latest demonstration shows the completed visible browser automation work, including the follow-on LA attendance/leave prototype. It is a local reconstruction/demo and is not evidence of production integration.
 
 **Earlier PI-only demo:**  
 https://youtu.be/LL4OfRidPTM
