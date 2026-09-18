@@ -18,10 +18,15 @@ The project uses **Dataset A** as the labelled development/evaluation dataset an
 
 ## Automation Demo
 
-**Live automation demo:**  
+**Latest PI/LA visible automation demo:**  
+https://youtu.be/82_9SsIhONg
+
+The latest demonstration shows the completed visible browser automation work, including the follow-on LA attendance/leave prototype. It is a local reconstruction/demo and is not evidence of production integration.
+
+**Earlier PI-only demo:**  
 https://youtu.be/LL4OfRidPTM
 
-The demo shows the PI automation prototype preparing structured data on a reconstructed local interface while preserving the human decision gate.
+The earlier video documents the original PI prototype.
 
 ---
 
@@ -56,7 +61,10 @@ Automation candidate analysis
 PI workflow reconstruction
         |
         v
-Human-in-the-loop automation prototype
+PI human-in-the-loop automation prototype
+        |
+        v
+LA attendance/leave follow-on prototype
         |
         v
 Validation + real Dataset-B replay + risk analysis
@@ -1238,7 +1246,7 @@ Step2_Final_Evidence_Package.xlsx
 
 ---
 
-## PI Workflow and Prototype
+## PI and LA Workflow Prototypes
 
 Key Step-3 scripts include:
 
@@ -1364,6 +1372,8 @@ The final submission can map the work into the requested seven-day allocation as
 
 The detailed actual work history is maintained separately in the completed work log.
 
+The LA attendance/leave prototype was completed as a follow-on extension after the original PI-focused seven-day core allocation. It reuses the same parameterized-core + validated-branch + human-gate design without changing the authoritative 540-line Step-1 segmentation artifact.
+
 ---
 
 # 21. Limitations
@@ -1429,6 +1439,8 @@ Before submission, verify:
 [ ] Step-2 family counts and absolute time are documented
 [ ] PI / LA candidate rationale is documented
 [ ] PI human-decision boundary is explicit
+[ ] LA attendance/leave follow-on prototype is documented
+[ ] Latest PI/LA demonstration link is included
 [ ] Prototype is runnable
 [ ] Live runner is inside the repository
 [ ] Live runner is committed to Git
@@ -1446,11 +1458,224 @@ Before submission, verify:
 [ ] No secrets/credentials are committed
 [ ] Git history is clean and meaningful
 [ ] Final submission artifacts are clearly identified
+[ ] LA prototype remains clearly identified as a follow-on local prototype
 ```
 
 ---
 
-# 24. Final Project State
+# 24. LA Automation Extension — Attendance and Leave Applications
+
+The LA family corresponds to attendance and leave application processing and was developed as the second automation opportunity after PI.
+
+## 24.1 LA evidence from Dataset B
+
+| Evidence dimension | LA observation |
+|---|---|
+| Observed workload | 99 segments; 18.33% of Dataset-B segments |
+| Observed segmented time | 42.62 minutes; 24.18% of observed segmented time |
+| Median execution | 22 s |
+| Mean events / segment | 48.08 |
+| Sessions | 14 |
+| Operators | 4 |
+| Browser evidence | 100% |
+| Clipboard evidence | 93.94% |
+| Browser interaction | 92.93% |
+| Word activity | 49.49% |
+| Excel activity | 2.02% |
+| Notepad activity | 4.04% |
+| Decision-oriented evidence | 18.18% |
+| Step-2 treatment | Second opportunity; feasible with validation; medium governance risk |
+
+Direct semantic evidence identified attendance/leave activity, including terminology corresponding to:
+
+```text
+attendance
+leave
+vacation / paid leave
+employee ID
+full name
+request type
+department
+status
+```
+
+These observations are branch evidence. They are not used to invent unsupported full-population subprocess counts.
+
+---
+
+## 24.2 Reconstructed LA target and workflow
+
+The local prototype targets the observed:
+
+```text
+/leave-applications
+```
+
+workflow.
+
+Reconstructed target fields:
+
+```text
+employee_id
+employee_name
+request_type
+department
+attendance
+leave_type
+leave_start
+leave_end
+supporting_document
+processing_comment
+```
+
+The workflow is:
+
+```text
+READ / RETRIEVE
+       |
+       v
+COPY / TRANSFER
+       |
+       v
+TRANSFORM / NORMALIZE
+       |
+       v
+FORM ENTRY
+       |
+       v
+DOCUMENT PREPARATION
+       |
+       v
+HUMAN REVIEW / DECISION
+```
+
+Treatment by stage:
+
+| Stage | Treatment |
+|---|---|
+| Read / retrieve source information | Automate when source is available and unambiguous |
+| Copy / transfer | Automate predictable transfer |
+| Transform / normalize | Automate deterministic formatting/date normalization |
+| Form entry | Automate structured field population with validation |
+| Document preparation | Automate predictable preparation |
+| Human review / decision | Outside automation boundary |
+| Missing input / unexpected state | Safe stop and surface to operator |
+
+---
+
+## 24.3 LA safety boundary
+
+The LA prototype follows the same core safety invariant used for PI:
+
+```text
+Mechanical preparation -> validation -> human review/decision
+```
+
+The automation is not responsible for:
+
+- approval,
+- rejection,
+- hold,
+- ambiguous policy interpretation,
+- exception resolution,
+- final business release.
+
+Unexpected UI states, missing required values, invalid values and unsupported variants should terminate the automated path rather than continue through a consequential business action.
+
+---
+
+## 24.4 LA prototype and demonstration
+
+The repository contains a controlled local `/leave-applications` sandbox and Playwright-based runners for the follow-on prototype.
+
+Expected prototype artifacts include:
+
+```text
+src/step3a1_authoritative_la_evidence_reconstruction_v1.py
+src/step3a2_la_chronological_workflow_reconstruction_v1.py
+src/step3a3_la_ocr_semantic_evidence_v1.py
+src/step3a4_la_workflow_map_v1.py
+src/step3b_la_automation_boundary_v1.py
+src/step3c_la_parameterized_vs_branch_analysis_v1.py
+src/step3d_la_technical_interface_discovery_v1.py
+src/step3e0_application_target_discovery_v1.py
+src/step3e1_la_local_prototype_v1.py
+src/step3e2_la_prototype_validation_v1.py
+src/step3e3_la_final_prototype_assessment_v1.py
+src/step3f_la_prototype_variant_validation_v1.py
+src/step3g_la_value_quantification_v1.py
+src/step3h_la_real_dataset_replay_v1.py
+src/step3i_la_real_dataset_extraction_similarity_v1.py
+src/la_run_pipeline.py
+
+prototype/la_leave_applications.html
+prototype/la_test_cases.json
+prototype/la_demo_runner.py
+prototype/la_demo_runner_live.py
+README_LA_AUTOMATION.md
+```
+
+Latest visible demonstration:
+
+https://youtu.be/82_9SsIhONg
+
+The demonstration is a local prototype reference. It does not establish production integration or a production success rate.
+
+---
+
+## 24.5 Relationship to PI
+
+The original PI prototype remains the most extensively quantified Step-3 case:
+
+- 209 PI segments,
+- 7,325 real PI event rows,
+- 16/16 combined controlled prototype validation,
+- 6/6 final focused variant validation,
+- real Dataset-B replay,
+- payload-level analysis of missing structured case content.
+
+The LA extension demonstrates that the same engineering pattern can be reused for a second family:
+
+```text
+same mechanical architecture
+        +
+different target fields / workflow data
+        +
+validated family-specific branch logic
+        +
+human decision gate
+```
+
+The authoritative Step-1 segmentation remains unchanged:
+
+```text
+segments.jsonl = 540 Dataset-B work units
+```
+
+LA is a downstream extension; it does not replace or reduce the 540-line deliverable.
+
+---
+
+## 24.6 LA limitations and next validation
+
+The LA prototype was reconstructed from operation-log evidence and a local target, not a live production attendance/leave portal.
+
+Remaining production validation requirements include:
+
+- selector and page-structure stability,
+- authentication/session behaviour,
+- authorization boundaries,
+- backend validation rules,
+- error semantics,
+- production exception paths,
+- audit controls,
+- matched manual-versus-assisted timing.
+
+The appropriate next step is controlled execution against a non-sensitive instance of the real attendance/leave system, followed by measurement of correction rate, safe-stop rate, exception rate, human-review time and matched execution time.
+
+---
+
+# 25. Final Project State
 
 The project progressed from an unstructured event stream to a defensible automation proposal:
 
@@ -1479,10 +1704,10 @@ PI selected as first pilot
 209 PI segments
         |
         v
-workflow + technical evidence
+PI workflow + technical evidence
         |
         v
-parameterized HITL prototype
+PI parameterized HITL prototype
         |
         v
 16/16 prototype validations passed
@@ -1491,7 +1716,16 @@ parameterized HITL prototype
 real Dataset-B PI replay
         |
         v
+LA selected as follow-on extension
+        |
+        v
+LA attendance/leave prototype
+        |
+        v
+combined PI/LA visible demonstration
+        |
+        v
 production-readiness gaps explicitly identified
 ```
 
-The resulting proposal is not an autonomous payroll decision system. It is a **human-in-the-loop automation assistant** for the repetitive mechanical portion of the PI workflow, with safe stops and explicit human control at business-decision points.
+The resulting proposal is not an autonomous payroll, attendance, or leave decision system. It is a **human-in-the-loop automation approach** for repetitive mechanical preparation, demonstrated first on PI and then extended to LA, with safe stops and explicit human control at business-decision points.
