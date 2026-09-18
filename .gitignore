@@ -5,3 +5,5 @@ __pycache__/
 .ipynb_checkpoints/
 .env
 outputs/
+LA_Automation_Pack/
+notebooks/
